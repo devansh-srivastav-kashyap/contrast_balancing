@@ -1,0 +1,27 @@
+function var= histEq(img)
+    if size(img,3)>1
+        img=rgb2gray(img);
+    end
+    
+    %build the histogram of the original image
+    count=zeros(256,1);
+    for i=0:255
+        count(i+1)=sum(sum(img==i));    %checks the number of occurence of each pixel value(grayscale value).
+    end
+    
+    %construct PDF for the image
+    p= count/ (size(img,1)*size(img,2));
+    
+    %calculate the transformation function to flatten the PDF of the
+    %histogram
+    s= round(255* cumsum(p));     
+    
+    %Map the value of s to corresponding pixels in the image
+    var= uint8(zeros(size(img)));
+    for k=1:size(s,1)
+        var(img==k-1)=s(k);
+    end
+    
+end
+        
+        
